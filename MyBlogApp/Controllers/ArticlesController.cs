@@ -10,6 +10,7 @@ using MyBlogApp.Models;
 
 namespace MyBlogApp.Controllers
 {
+    [CategoryFilter]
     public class ArticlesController : Controller
     {
         private BlogContext db = new BlogContext();
