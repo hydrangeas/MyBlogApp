@@ -160,6 +160,7 @@ namespace MyBlogApp.Controllers
         }
 
         // GET: Articles/Delete/5
+        [Authorize(Roles = "Owners")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -177,12 +178,69 @@ namespace MyBlogApp.Controllers
         // POST: Articles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Owners")]
         public ActionResult DeleteConfirmed(int id)
         {
             Article article = db.Articles.Find(id);
+
+            Category category = article.Category;
+            if(category != null)
+            {
+                category.Count--;
+                db.Entry(category).State = EntityState.Modified;
+            }
+            article.Comments.Clear();
+
             db.Articles.Remove(article);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateComment([Bind(Include = "ArticleId,Body")] Comment comment)
+        {
+            var article = db.Articles.Find(comment.ArticleId);
+            if (article == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+            comment.Created = DateTime.Now;
+            comment.Article = article;
+
+            db.Comments.Add(comment);
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = comment.ArticleId });
+        }
+
+        [Authorize(Roles = "Owners")]
+        public ActionResult DeleteComment(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var comment = db.Comments.Find(id);
+            if(comment == null)
+            {
+                return HttpNotFound();
+            }
+            return View(comment);
+        }
+
+        [HttpPost, ActionName("DeleteComment")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Owners")]
+        public ActionResult DeleteCommentConfirmed(int id)
+        {
+            var comment = db.Comments.Find(id);
+            int articleId = comment.Article.Id;
+
+            db.Comments.Remove(comment);
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = articleId });
         }
 
         protected override void Dispose(bool disposing)
