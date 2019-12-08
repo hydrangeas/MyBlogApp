@@ -1,4 +1,5 @@
-﻿@model MyBlogApp.Models.Article
+﻿@using MyBlogApp.Models
+@model MyBlogApp.Models.Article
 
 @{
     ViewBag.Title = "Create";
@@ -35,9 +36,18 @@
         <div class="form-group">
             @Html.LabelFor(model=>model.CategoryName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control", list = "categories" } })
                 @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
             </div>
+            <datalist id="categories">
+                @{ 
+                    var categories = (List<Category>)ViewBag.Categories;
+                    foreach(var item in categories)
+                    {
+                        <option>@Html.DisplayFor(model=>item.CategoryName)</option>
+                    }
+                }
+            </datalist>
         </div>
 
         <div class="form-group">
