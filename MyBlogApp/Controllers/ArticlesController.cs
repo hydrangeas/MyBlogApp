@@ -152,7 +152,7 @@ namespace MyBlogApp.Controllers
                     dbArticle.Category = category;
                 }
 
-                db.Entry(article).State = EntityState.Modified;
+                db.Entry(dbArticle).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

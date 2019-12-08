@@ -9,26 +9,26 @@
 {
     <div class="panel panel-default">
         <div class="panel-header">
-            @Html.DisplayFor(model => item.Title);
+            @Html.DisplayFor(model => item.Title)
         </div>
         <div class="panel-body">
             <div class="article-body">
-                @Html.DisplayFor(model => item.Body);
+                @Html.DisplayFor(model => item.Body)
             </div>
             <div class="text-right text-muted">
-                @Html.ActionLink("続きを読む", "Details", new { id = item.Id });
+                @Html.ActionLink("続きを読む", "Details", new { id = item.Id })
             </div>
         </div>
         <div class="panel-footer text-right">
-            @Html.DisplayNameFor(model => model.CategoryName);
+            @Html.DisplayNameFor(model => model.CategoryName)
             @Html.ActionLink(item.Category.CategoryName, "Details",
-                new { id = item.Category.Id, Controller = "Categories" });
+                new { id = item.Category.Id, Controller = "Categories" })
 
-            @Html.DisplayNameFor(model => model.Created);
-            @Html.DisplayFor(model => item.Created);
+            @Html.DisplayNameFor(model => model.Created)
+            @Html.DisplayFor(model => item.Created)
 
-            @Html.DisplayNameFor(model => model.Modified);
-            @Html.DisplayFor(model => item.Modified);
+            @Html.DisplayNameFor(model => model.Modified)
+            @Html.DisplayFor(model => item.Modified)
         </div>
     </div>
 }
